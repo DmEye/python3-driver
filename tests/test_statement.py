@@ -69,3 +69,9 @@ def test_wrong_cursor(two_connections):
             with pytest.raises(InterfaceError,
                                match='Cannot execute Statement that was created by different Connection.'):
                 cur2.execute(ps)
+
+def test_cleanup(two_connections):
+    con, _ = two_connections
+    with con.cursor() as cur:
+        with cur.prepare('select * from country') as ps:
+            cur.execute(ps)
